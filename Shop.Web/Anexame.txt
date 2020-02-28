@@ -1,4 +1,23 @@
-﻿using System;
+
+quede en el video 9 
+Comensar el 10
+
+Pagina 20 del documento   ==>  NET CORE _ XAMARIN FORMS _ XAMARIN CLASSIC _ MVVM CROSS
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------------
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,34 +31,29 @@ namespace Shop.Web.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly IRepository repository;
+        private readonly DataContext _context;
 
-        public ProductsController(IRepository repository)
+        public ProductsController(DataContext context)
         {
-            this.repository = repository;
+            _context = context;
         }
 
         // GET: Products
-        //public async Task<IActionResult> Index()
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            // return View(await _context.Products.ToListAsync());
-            return View(this.repository.GetProducts());
+            return View(await _context.Products.ToListAsync());
         }
 
         // GET: Products/Details/5
-        // public async Task<IActionResult> Details(int? id)
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            //var product = await _context.Products
-            //    .FirstOrDefaultAsync(m => m.Id == id);
-            var product = this.repository.GetProduct(id.Value);
-
+            var product = await _context.Products
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (product == null)
             {
                 return NotFound();
@@ -54,33 +68,31 @@ namespace Shop.Web.Controllers
             return View();
         }
 
+        // POST: Products/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create( Product product)
+        public async Task<IActionResult> Create([Bind("Id,Name,Price,ImageUrl,LastPurchase,LastSale,IsAvailabe,Stock")] Product product)
         {
             if (ModelState.IsValid)
             {
-                //_context.Add(product);
-                //await _context.SaveChangesAsync();
-                this.repository.AddProduct(product);
-                await this.repository.SaveAllAsync();
+                _context.Add(product);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(product);
         }
 
         // GET: Products/Edit/5
-        //public async Task<IActionResult> Edit(int? id) 
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            //var product = await _context.Products.FindAsync(id);
-            var product = this.repository.GetProduct(id.Value);
-
+            var product = await _context.Products.FindAsync(id);
             if (product == null)
             {
                 return NotFound();
@@ -88,9 +100,12 @@ namespace Shop.Web.Controllers
             return View(product);
         }
 
+        // POST: Products/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id,  Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,ImageUrl,LastPurchase,LastSale,IsAvailabe,Stock")] Product product)
         {
             if (id != product.Id)
             {
@@ -101,15 +116,12 @@ namespace Shop.Web.Controllers
             {
                 try
                 {
-                    //_context.Update(product);
-                    //await _context.SaveChangesAsync();
-                    this.repository.UpdateProduct(product);
-                    await this.repository.SaveAllAsync();
+                    _context.Update(product);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    //if (!ProductExists(product.Id))
-                    if (!this.repository.ProductExists(product.Id))
+                    if (!ProductExists(product.Id))
                     {
                         return NotFound();
                     }
@@ -124,16 +136,15 @@ namespace Shop.Web.Controllers
         }
 
         // GET: Products/Delete/5
-        // public async Task<IActionResult> Delete(int? id)
-        public ActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            //  var product = await _context.Products
-            //    .FirstOrDefaultAsync(m => m.Id == id);
-            var product = this.repository.GetProduct(id.Value);
+
+            var product = await _context.Products
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (product == null)
             {
                 return NotFound();
@@ -147,19 +158,20 @@ namespace Shop.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            //var product = await _context.Products.FindAsync(id);
-            //_context.Products.Remove(product);
-            //await _context.SaveChangesAsync();
-
-            var product = this.repository.GetProduct(id);
-            this.repository.RemoveProduct(product);
-            await this.repository.SaveAllAsync();
+            var product = await _context.Products.FindAsync(id);
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        //private bool ProductExists(int id)
-        //{
-        //    return _context.Products.Any(e => e.Id == id);
-        //}
+        private bool ProductExists(int id)
+        {
+            return _context.Products.Any(e => e.Id == id);
+        }
     }
 }
+
+
+
+
+fin antes del repositorio---------------------------------------------------------
