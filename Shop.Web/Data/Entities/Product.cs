@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shop.Web.Data.Entities
 {
-    public class Product
+    public class Product : IEntity
     {
 		public int Id { get; set; }
 
@@ -31,6 +31,9 @@ namespace Shop.Web.Data.Entities
 
 		[DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = false)]
 		public double Stock { get; set; }
+
+		// Crear una relacion entre la tabla Productos con la tabla User
+		public User User { get; set; }
 
 	}
 }
