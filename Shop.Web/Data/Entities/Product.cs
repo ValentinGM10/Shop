@@ -35,5 +35,24 @@ namespace Shop.Web.Data.Entities
 		// Crear una relacion entre la tabla Productos con la tabla User
 		public User User { get; set; }
 
+		public string ImageFullPath
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(this.ImageUrl))
+				{
+					return null;
+				}
+				//return $"https://shopzulu.azurewebsites.net{this.ImageUrl.Substring(1)}";
+				return $"https://shopvale.azurewebsites.net{this.ImageUrl.Substring(1)}";
+				// Interpolacion 
+			}
+		}
+
+//		https://shopvale.azurewebsites.net/Products
+//      https://shopvale.azurewebsites.net/Api/Products
+
+
+
 	}
 }
